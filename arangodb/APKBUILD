@@ -1,0 +1,57 @@
+# Maintainer: Mike Williamson <mike at korora dot ca>
+pkgname=arangodb
+pkgver=3.3.12
+pkgrel=0
+pkgdesc="A multi-model NoSQL database, combining key-value, document and graph data models."
+url="https://www.arangodb.com/"
+arch="i686"
+license="APACHE"
+depends="openssl systemd curl zlib"
+makedepends="cmake openssl-dev zlib-dev python2 icu boost linux-headers alpine-sdk"
+install=arangodb.install
+subpackages="$pkgname-dev $pkgname-doc"
+validpgpkeys="CD8CB0F1E0AD5B52E93F41E7EA93F5E56E751E9B" # Frank Celler (ArangoDB Debian Repository) <info@arangodb.com>
+source="https://www.arangodb.com/repositories/Source/ArangoDB-$pkgver.tar.bz2 https://www.arangodb.com/repositories/Source/ArangoDB-${pkgver}.tar.bz2.asc arangodb3.service arangodb-tmpfile.conf arangodb-users.conf"
+builddir="$srcdir/"
+
+build() {
+	cd "$builddir"
+  msg2 "Configuring ArangoDB."
+  cd $srcdir/ArangoDB-$pkgver
+  [ -d build ] || mkdir build && cd build
+  cmake -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_C_FLAGS="-O2 -fno-omit-frame-pointer" \
+    -DCMAKE_CXX_FLAGS="-O2 -fno-omit-frame-pointer" \
+    -DCMAKE_INSTALL_PREFIX:PATH=/ \
+    -DCMAKE_SKIP_RPATH=On \
+    ..
+  msg2 "Building ArangoDB."
+  make -j $(nproc)
+}
+
+package() {
+	cd "$builddir"
+  msg2 "Preparing ArangoDB."
+  mkdir -p $pkgdir/usr/bin
+  cp -R $srcdir/ArangoDB-$pkgver/build/etc $pkgdir
+  cp -R $srcdir/ArangoDB-$pkgver/build/var $pkgdir
+  cp -R $srcdir/ArangoDB-$pkgver/build/bin/* $pkgdir/usr/bin/
+  mkdir -p $pkgdir/usr/share/arangodb3/js
+  mkdir -p $pkgdir/usr/share/man
+  mkdir -p $pkgdir/var/lib/arangodb3
+  mkdir -p $pkgdir/var/lib/arangodb3-apps
+  mkdir -p $pkgdir/var/log/arangodb3
+  cp -R $srcdir/ArangoDB-$pkgver/js/* $pkgdir/usr/share/arangodb3/js
+  cp -R $srcdir/ArangoDB-$pkgver/Documentation/man/* $pkgdir/usr/share/man
+
+  install -Dm644 arangodb-users.conf "$pkgdir"/usr/lib/sysusers.d/arangodb.conf
+  install -Dm644 arangodb-tmpfile.conf "$pkgdir"/usr/lib/tmpfiles.d/arangodb.conf
+  install -Dm644 $srcdir/ArangoDB-"$pkgver"/Installation/logrotate.d/arangod.systemd "$pkgdir"/etc/logrotate.d/arangodb3
+  install -D -m644 $srcdir/ArangoDB-$pkgver/LICENSE "${pkgdir}/usr/share/licenses/arangodb3/LICENSE"
+
+  msg2 "Preparing systemd service."
+  mkdir -p $pkgdir/usr/lib/systemd/system
+  cp $srcdir/arangodb3.service $pkgdir/usr/lib/systemd/system/
+}
+
