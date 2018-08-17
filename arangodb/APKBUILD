@@ -1,14 +1,14 @@
-# Maintainer: Mike Williamson <mike at korora dot ca>
+# Maintainer: Mike Williamson <mike@korora.ca>
 pkgname=arangodb
 pkgver=3.3.12
 pkgrel=0
 pkgdesc="A multi-model NoSQL database, combining key-value, document and graph data models."
 url="https://www.arangodb.com/"
-arch="i686"
+arch="x86_64"
 license="APACHE"
-depends="openssl systemd curl zlib"
+depends="openssl curl zlib"
 makedepends="cmake openssl-dev zlib-dev python2 icu boost linux-headers alpine-sdk"
-install=arangodb.install
+install="arangodb.post-install"
 subpackages="$pkgname-dev $pkgname-doc"
 validpgpkeys="CD8CB0F1E0AD5B52E93F41E7EA93F5E56E751E9B" # Frank Celler (ArangoDB Debian Repository) <info@arangodb.com>
 source="https://www.arangodb.com/repositories/Source/ArangoDB-$pkgver.tar.bz2 https://www.arangodb.com/repositories/Source/ArangoDB-${pkgver}.tar.bz2.asc arangodb3.service arangodb-tmpfile.conf arangodb-users.conf"
@@ -55,3 +55,8 @@ package() {
   cp $srcdir/arangodb3.service $pkgdir/usr/lib/systemd/system/
 }
 
+sha512sums="c09b054630f496652be8b6290381f0e220734293113c8114d50b3e68ca88e3810ee2dd045b4b799c0883b06be40d505534fe76c05ee570b743d65a1ba7e4baa9  ArangoDB-3.3.12.tar.bz2
+398516ff5d8de4eb7fb28e3cd3597260e1723884532b12653b4926a8fe34299d3593aa050a07ffd6670dcd5a2a88b488e4af562637aa67e40ccbebf711c905c0  ArangoDB-3.3.12.tar.bz2.asc
+18bccbc960555c600c86409a89545c1c056dbce9abcd5724cd61c54a734d9c974df0d01b0a49c1859299ffc448c3e576f8c2bcc6134ad3f5062293b11cf85091  arangodb3.service
+b1fdf8cc0525d1fc093d02b24b18a1d8361fb2cd8274974269957ef8074a26eb4f2174bdd4abd41154d535df43cd9d553c1b8205cd5945e53674d25dfa3c533f  arangodb-tmpfile.conf
+8a73da7dfb9cc371ce7c72efd53afc04ede26a890cd7542c82c518bf3d7c5be38abfcad66235fc9cf9d63c9955ebcdbca4c1d7056b386b1b59bf61dc1887febd  arangodb-users.conf"
