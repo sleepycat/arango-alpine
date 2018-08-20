@@ -9,7 +9,7 @@ license="APACHE"
 depends="openssl curl zlib"
 makedepends="cmake openssl-dev zlib-dev python2 icu boost linux-headers alpine-sdk"
 install="arangodb.post-install"
-subpackages="$pkgname-dev $pkgname-doc"
+subpackages="$pkgname-doc"
 validpgpkeys="CD8CB0F1E0AD5B52E93F41E7EA93F5E56E751E9B" # Frank Celler (ArangoDB Debian Repository) <info@arangodb.com>
 source="https://www.arangodb.com/repositories/Source/ArangoDB-$pkgver.tar.bz2 https://www.arangodb.com/repositories/Source/ArangoDB-${pkgver}.tar.bz2.asc arangodb3.service arangodb-tmpfile.conf arangodb-users.conf"
 builddir="$srcdir/"
@@ -21,8 +21,6 @@ build() {
   [ -d build ] || mkdir build && cd build
   cmake -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr \
-    -DCMAKE_C_FLAGS="-O2 -fno-omit-frame-pointer" \
-    -DCMAKE_CXX_FLAGS="-O2 -fno-omit-frame-pointer" \
     -DCMAKE_INSTALL_PREFIX:PATH=/ \
     -DCMAKE_SKIP_RPATH=On \
     ..
