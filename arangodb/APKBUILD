@@ -1,6 +1,6 @@
 # Maintainer: Mike Williamson <mike@korora.ca>
 pkgname=arangodb
-pkgver=3.3.12
+pkgver=3.3.14
 pkgrel=0
 pkgdesc="A multi-model NoSQL database, combining key-value, document and graph data models."
 url="https://www.arangodb.com/"
@@ -11,7 +11,7 @@ options="!check"
 license="APACHE"
 depends="openssl curl zlib"
 makedepends="cmake openssl-dev zlib-dev python2 icu boost linux-headers alpine-sdk"
-install="arangodb.pre-install arangodb.post-install"
+install="arangodb.pre-install"
 subpackages="$pkgname-doc"
 validpgpkeys="CD8CB0F1E0AD5B52E93F41E7EA93F5E56E751E9B" # Frank Celler (ArangoDB Debian Repository) <info@arangodb.com>
 source="
@@ -19,7 +19,6 @@ source="
 	https://www.arangodb.com/repositories/Source/ArangoDB-${pkgver}.tar.bz2.asc
 	$pkgname.initd
 	$pkgname.pre-install
-	$pkgname.post-install
 	"
 builddir="$srcdir/"
 
@@ -61,8 +60,8 @@ package() {
   install -D -m644 $srcdir/ArangoDB-$pkgver/LICENSE "${pkgdir}/usr/share/licenses/arangodb3/LICENSE"
 }
 
-sha512sums="c09b054630f496652be8b6290381f0e220734293113c8114d50b3e68ca88e3810ee2dd045b4b799c0883b06be40d505534fe76c05ee570b743d65a1ba7e4baa9  ArangoDB-3.3.12.tar.bz2
-398516ff5d8de4eb7fb28e3cd3597260e1723884532b12653b4926a8fe34299d3593aa050a07ffd6670dcd5a2a88b488e4af562637aa67e40ccbebf711c905c0  ArangoDB-3.3.12.tar.bz2.asc
+sha512sums="1af1d20ad5ce1f69d07fc35449b6d352122f63f37482b822e362bc4a3d90ac0a635cb55e9e4a26e7749d5d29dc26e19a0464cbea6e98f136fda4b8e0d736fb5a  ArangoDB-3.3.14.tar.bz2
+e6d27a5353e824f62adb8e7a37e9e4c707e4d5869999e8d24a4d2f413790165a5c2fc813aa567620dde71256ed6713a38b6f03fac2e83db22e0e6baf7fdac321  ArangoDB-3.3.14.tar.bz2.asc
 9c0757ec3af25bad4a24f66130d96bc618117140fe4b88553c4ff68fabe99b78ea5a9a2b38e650555f4f1eb99da53162e4182b51a29a7a5ef8a67af21fbc3de5  arangodb.initd
 94ce1489ba23029c89b7045908682aa23e49311a701082d2faca933424ba4537838cc6b5185d932052ca00fc73db8e30c0ff905dd0c6fa6969246f74e4f52624  arangodb.pre-install
-269f55e2a107de60f742a131a7786acc12bb63cda76fb40ad04eb859d0560861cdf2e8783ebb7a040971f4d21d231ee828d88d4370ce7d10851883a81f07610c  arangodb.post-install"
+"
