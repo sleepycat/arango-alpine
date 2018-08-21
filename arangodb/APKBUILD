@@ -5,13 +5,22 @@ pkgrel=0
 pkgdesc="A multi-model NoSQL database, combining key-value, document and graph data models."
 url="https://www.arangodb.com/"
 arch="x86_64"
+pkgusers="arangodb"
+pkggroups="arangodb"
+options="!check"
 license="APACHE"
 depends="openssl curl zlib"
 makedepends="cmake openssl-dev zlib-dev python2 icu boost linux-headers alpine-sdk"
-install="arangodb.post-install"
+install="arangodb.pre-install arangodb.post-install"
 subpackages="$pkgname-doc"
 validpgpkeys="CD8CB0F1E0AD5B52E93F41E7EA93F5E56E751E9B" # Frank Celler (ArangoDB Debian Repository) <info@arangodb.com>
-source="https://www.arangodb.com/repositories/Source/ArangoDB-$pkgver.tar.bz2 https://www.arangodb.com/repositories/Source/ArangoDB-${pkgver}.tar.bz2.asc arangodb3.service arangodb-tmpfile.conf arangodb-users.conf"
+source="
+	https://www.arangodb.com/repositories/Source/ArangoDB-$pkgver.tar.bz2
+	https://www.arangodb.com/repositories/Source/ArangoDB-${pkgver}.tar.bz2.asc
+	$pkgname.initd
+	$pkgname.pre-install
+	$pkgname.post-install
+	"
 builddir="$srcdir/"
 
 build() {
@@ -29,32 +38,31 @@ build() {
 }
 
 package() {
-	cd "$builddir"
+  cd "$builddir"
   msg2 "Preparing ArangoDB."
   mkdir -p $pkgdir/usr/bin
   cp -R $srcdir/ArangoDB-$pkgver/build/etc $pkgdir
   cp -R $srcdir/ArangoDB-$pkgver/build/var $pkgdir
   cp -R $srcdir/ArangoDB-$pkgver/build/bin/* $pkgdir/usr/bin/
-  mkdir -p $pkgdir/usr/share/arangodb3/js
-  mkdir -p $pkgdir/usr/share/man
-  mkdir -p $pkgdir/var/lib/arangodb3
-  mkdir -p $pkgdir/var/lib/arangodb3-apps
-  mkdir -p $pkgdir/var/log/arangodb3
-  cp -R $srcdir/ArangoDB-$pkgver/js/* $pkgdir/usr/share/arangodb3/js
-  cp -R $srcdir/ArangoDB-$pkgver/Documentation/man/* $pkgdir/usr/share/man
 
-  install -Dm644 arangodb-users.conf "$pkgdir"/usr/lib/sysusers.d/arangodb.conf
-  install -Dm644 arangodb-tmpfile.conf "$pkgdir"/usr/lib/tmpfiles.d/arangodb.conf
-  install -Dm644 $srcdir/ArangoDB-"$pkgver"/Installation/logrotate.d/arangod.systemd "$pkgdir"/etc/logrotate.d/arangodb3
+  cd "$pkgdir"
+
+  install -d -o arangodb -g arangodb \
+	usr/share/arangodb3/js \
+	usr/share/man \
+	var/lib/arangodb3 \
+	var/lib/arangodb3-apps \
+	var/log/arangodb3
+
+  cp -R $srcdir/ArangoDB-$pkgver/js/* usr/share/arangodb3/js
+  cp -R $srcdir/ArangoDB-$pkgver/Documentation/man/* usr/share/man
+
+  install -D -m644 $srcdir/ArangoDB-"$pkgver"/Installation/logrotate.d/arangod.systemd "$pkgdir"/etc/logrotate.d/arangodb3
   install -D -m644 $srcdir/ArangoDB-$pkgver/LICENSE "${pkgdir}/usr/share/licenses/arangodb3/LICENSE"
-
-  msg2 "Preparing systemd service."
-  mkdir -p $pkgdir/usr/lib/systemd/system
-  cp $srcdir/arangodb3.service $pkgdir/usr/lib/systemd/system/
 }
 
 sha512sums="c09b054630f496652be8b6290381f0e220734293113c8114d50b3e68ca88e3810ee2dd045b4b799c0883b06be40d505534fe76c05ee570b743d65a1ba7e4baa9  ArangoDB-3.3.12.tar.bz2
 398516ff5d8de4eb7fb28e3cd3597260e1723884532b12653b4926a8fe34299d3593aa050a07ffd6670dcd5a2a88b488e4af562637aa67e40ccbebf711c905c0  ArangoDB-3.3.12.tar.bz2.asc
-18bccbc960555c600c86409a89545c1c056dbce9abcd5724cd61c54a734d9c974df0d01b0a49c1859299ffc448c3e576f8c2bcc6134ad3f5062293b11cf85091  arangodb3.service
-b1fdf8cc0525d1fc093d02b24b18a1d8361fb2cd8274974269957ef8074a26eb4f2174bdd4abd41154d535df43cd9d553c1b8205cd5945e53674d25dfa3c533f  arangodb-tmpfile.conf
-8a73da7dfb9cc371ce7c72efd53afc04ede26a890cd7542c82c518bf3d7c5be38abfcad66235fc9cf9d63c9955ebcdbca4c1d7056b386b1b59bf61dc1887febd  arangodb-users.conf"
+9c0757ec3af25bad4a24f66130d96bc618117140fe4b88553c4ff68fabe99b78ea5a9a2b38e650555f4f1eb99da53162e4182b51a29a7a5ef8a67af21fbc3de5  arangodb.initd
+94ce1489ba23029c89b7045908682aa23e49311a701082d2faca933424ba4537838cc6b5185d932052ca00fc73db8e30c0ff905dd0c6fa6969246f74e4f52624  arangodb.pre-install
+269f55e2a107de60f742a131a7786acc12bb63cda76fb40ad04eb859d0560861cdf2e8783ebb7a040971f4d21d231ee828d88d4370ce7d10851883a81f07610c  arangodb.post-install"

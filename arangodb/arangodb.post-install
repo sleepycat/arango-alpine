@@ -1,9 +1,5 @@
 post_install() {
 
-  chown -R arangodb:arangodb "/var/lib/arangodb3" &> /dev/null
-  chown -R arangodb:arangodb "/var/lib/arangodb3-apps" &> /dev/null
-  chown -R arangodb:arangodb "/var/log/arangodb3" &> /dev/null
-
   cat <<-EOF
 
   Welcome to ArangoDB.
@@ -30,9 +26,7 @@ post_install() {
     127.0.0.1:8529@_system> require("org/arangodb/users").save("myuser",
     "mypassword");
 
-  Set the 'authentication = true' and then restart ArangoDB:
-
-   sudo systemctl restart arangodb3.service
+  Set the 'authentication = true' and then restart ArangoDB
 
   You can now use your username and password to access the
   administrative interface at:
@@ -42,7 +36,6 @@ post_install() {
   ArangoDB now works with logrotate:
 
      sudo logrotate /etc/logrotate.d/arangodb3
-
 
   Getting help:
     http://stackoverflow.com/questions/tagged/arangodb
@@ -62,10 +55,6 @@ post_upgrade() {
   https://github.com/arangodb/arangodb/blob/devel/CHANGELOG
 
 EOF
-}
-
-pre_remove() {
-  systemctl stop arangodb3.service &> /dev/null
 }
 
 post_remove() {
