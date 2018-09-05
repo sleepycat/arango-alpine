@@ -1,23 +1,9 @@
 #!/sbin/openrc-run
 
+command="/usr/sbin/arangod"
+command_args="--configuration=/etc/arangodb3/arangod.conf --pid-file=/run/arangodb3/arangod.pid"
+pidfile="/run/arangodb3/arangod.pid"
+
 depend() {
   need net
-}
-
-start() {
-  ebegin "Starting ArangoDB"
-  start-stop-daemon \
-    --start \
-    --exec /usr/sbin/arangod \
-    --pidfile /var/run/arangod3.pid \
-    --make-pidfile \
-    --user arangodb3 \
-    --background
-  eend $? "Failed to start ArangoDB"
-}
-
-stop() {
-  ebegin "Stopping ArangoDB"
-  start-stop-daemon --stop --pidfile /var/run/arangod3.pid
-  eend $? "Failed to stop ArangoDB"
 }
