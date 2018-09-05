@@ -52,6 +52,7 @@ package() {
 	var/lib/arangodb3 \
 	var/lib/arangodb3-apps \
 	var/log/arangodb3
+  install -Dm755 "$srcdir/arangodb.initd" "$pkgdir/etc/init.d/arangodb"
 
   cp -R $srcdir/ArangoDB-$pkgver/js/* usr/share/arangodb3/js
   cp -R $srcdir/ArangoDB-$pkgver/Documentation/man/* usr/share/man
