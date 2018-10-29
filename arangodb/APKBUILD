@@ -1,6 +1,6 @@
 # Maintainer: Mike Williamson <mike@korora.ca>
 pkgname=arangodb
-pkgver=3.3.14
+pkgver=3.3.19
 pkgrel=0
 pkgdesc="A multi-model NoSQL database, combining key-value, document and graph data models."
 url="https://www.arangodb.com/"
@@ -61,8 +61,7 @@ package() {
   install -D -m644 $srcdir/ArangoDB-$pkgver/LICENSE "${pkgdir}/usr/share/licenses/arangodb3/LICENSE"
 }
 
-sha512sums="1af1d20ad5ce1f69d07fc35449b6d352122f63f37482b822e362bc4a3d90ac0a635cb55e9e4a26e7749d5d29dc26e19a0464cbea6e98f136fda4b8e0d736fb5a  ArangoDB-3.3.14.tar.bz2
-e6d27a5353e824f62adb8e7a37e9e4c707e4d5869999e8d24a4d2f413790165a5c2fc813aa567620dde71256ed6713a38b6f03fac2e83db22e0e6baf7fdac321  ArangoDB-3.3.14.tar.bz2.asc
-9c0757ec3af25bad4a24f66130d96bc618117140fe4b88553c4ff68fabe99b78ea5a9a2b38e650555f4f1eb99da53162e4182b51a29a7a5ef8a67af21fbc3de5  arangodb.initd
-94ce1489ba23029c89b7045908682aa23e49311a701082d2faca933424ba4537838cc6b5185d932052ca00fc73db8e30c0ff905dd0c6fa6969246f74e4f52624  arangodb.pre-install
-"
+sha512sums="7170e5aa1140eb889bc1a8cc59fe95c00160eef4fcf485f867d501a7264a348de7e4008fa92ea81f0171567cbe9f9b1e394495855dd2b5cb50f622e830e89cb2  ArangoDB-3.3.19.tar.bz2
+7ac8ab67d335473e7a515bf4cb3901bdde0b83af8052b6315ecdc413f38beeeeb1c57c5bd6cd98bba3a5e996d19d56ff981bb914ee72f632c7e736151ffd3f54  ArangoDB-3.3.19.tar.bz2.asc
+b5469adf31d86dddb9e1126614ddd2f3777aa181d39f5cc9f3edeefd1c8fda046b76326ed3e792312ac34571dcf16aba716f72c7b99ae5cd96004a0077972951  arangodb.initd
+94ce1489ba23029c89b7045908682aa23e49311a701082d2faca933424ba4537838cc6b5185d932052ca00fc73db8e30c0ff905dd0c6fa6969246f74e4f52624  arangodb.pre-install"
