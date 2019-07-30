@@ -6,10 +6,9 @@ RUN apk add -U alpine-sdk vim tree
 RUN git config --global user.name "Mike Williamson"
 RUN git config --global user.email "mike@korora.ca"
 RUN adduser -D mike
-# Generate a password for the mike user
-# RUN passwd -d "$PASSWORD" mike
+
 RUN echo "Defaults targetpw" >> /etc/sudoers
-RUN echo "ALL ALL=(ALL) ALL" >> /etc/sudoers
+RUN echo "ALL ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN addgroup mike abuild
 RUN mkdir -p /var/cache/distfiles
 RUN chmod a+w /var/cache/distfiles
